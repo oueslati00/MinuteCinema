@@ -12,9 +12,9 @@ import org.springframework.core.io.Resource;
 @AllArgsConstructor
 public class videoDkikaResposne {
     private String description;
-    private String videoUrl;
+    private String Url;
     private String editor;
-    private String videoName;
+    private String Name;
 
     private Resource fileInfo;
 

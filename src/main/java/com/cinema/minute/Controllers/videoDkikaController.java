@@ -20,8 +20,6 @@ public class videoDkikaController {
     @Autowired
     VideoDkikaService videoDkikaService;
 
-    @Autowired
-    private StorageService storageService;
 
     @GetMapping(value = "/all")
     public ResponseEntity<?> getAllVideoDkika(){

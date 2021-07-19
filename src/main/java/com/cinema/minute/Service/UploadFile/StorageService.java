@@ -35,23 +35,24 @@ public class StorageService implements  FileStorageService {
             throw new RuntimeException("Could not initialize folder for upload!");
         }
     }
-    public static int i= 1;
+
     @Override
     public UploadFile save(MultipartFile file) {
-
+        int i =1;
         // check if the file Exist in this Folder
         Path p = Paths.get(path).resolve(file.getName());
+
         while (Files.exists(p))
         {
             System.out.println(file.getName());
             System.out.println(file.getContentType());
-            p=Paths.get(path).resolve(file.getOriginalFilename() + i++);
+            p=Paths.get(path).resolve( i++ +file.getOriginalFilename() );
         }
 
         UploadFile uploadFile = null;
         try {
             Files.copy(file.getInputStream(), p);
-                uploadFile = fileInDB.addFile(file);
+                uploadFile = fileInDB.addFile(file,p);
 
         } catch (Exception e) {
 
@@ -108,5 +109,13 @@ public class StorageService implements  FileStorageService {
         finally {
             fileInDB.removeFileById(id);
         }
+    }
+
+    // change file name method
+    private Path RenameMethod(Path p,MultipartFile file){
+        System.out.println( "file name is " + p.getFileName());
+        System.out.println("path value is " + p);
+
+        return null;
     }
 }

@@ -5,6 +5,8 @@ import com.cinema.minute.ui.Model.Request.CompteRenduRequest.compteRendurequest;
 import com.cinema.minute.ui.Model.Request.VideoDkikaRequest;
 import com.cinema.minute.ui.Model.Response.videoDkikaResposne;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,9 +18,6 @@ import java.util.List;
 @RequestMapping("/api/compteRendu")
 public class CompteRendu {
 
-
-    //TODO : error occur was checked when we upload file name that already exist
-    // you will find it storage service in upload method
 
     @Autowired
     private CompteRenduService compteRenduService;
@@ -42,16 +41,25 @@ public class CompteRendu {
         return new ResponseEntity<>(HttpStatus.OK);
 
     }
+    @GetMapping("/test/{filename:.+}")
+    @ResponseBody
+    public ResponseEntity<Resource> getFile(@PathVariable String filename) {
+        System.out.println(filename);
+        Resource file = compteRenduService.load(filename);
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"").body(file);
+    }
 
     @PutMapping(value = "/{id}")
     public ResponseEntity<?> updateCompteRendu(@RequestBody VideoDkikaRequest vd, @PathVariable Integer id) {
-        compteRenduService.updateVideo(vd, id);
+        compteRenduService.updateCompteRendu(vd, id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<?> removeCompteRendu(@PathVariable Integer id) {
-        compteRenduService.removeVideo(id);
+        compteRenduService.removeCompteRendu(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
 }

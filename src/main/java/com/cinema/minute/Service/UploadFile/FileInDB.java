@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
@@ -24,11 +25,11 @@ public class FileInDB {
        return fileRepo.findAll();
     }
 
-    public UploadFile addFile(MultipartFile file){
+    public UploadFile addFile(MultipartFile file, Path p){
         UploadFile file1 = new UploadFile();
         file1.setName(file.getName());
         file1.setTypeFile(file.getContentType());
-        file1.setUrlFile( Paths.get(path).resolve(file.getOriginalFilename()).toString());
+        file1.setUrlFile(p.toString());
         fileRepo.save(file1);
         return file1;
     }

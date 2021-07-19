@@ -13,6 +13,7 @@ import com.cinema.minute.ui.Model.Request.VideoDkikaRequest;
 import com.cinema.minute.ui.Model.Response.CompteRendu.CompteRenduList;
 import com.cinema.minute.ui.Model.Response.videoDkikaResposne;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -75,9 +76,13 @@ public class CompteRenduService {
 
     }
 
-    public void updateVideo(VideoDkikaRequest vd, Integer id) {
+    public void updateCompteRendu(VideoDkikaRequest vd, Integer id) {
     }
 
-    public void removeVideo(Integer id) {
+    public void removeCompteRendu(Integer id) {
+    }
+
+    public Resource load(String filename) {
+        return storageService.load(filename);
     }
 }
