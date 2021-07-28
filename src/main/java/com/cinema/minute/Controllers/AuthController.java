@@ -11,6 +11,8 @@ import com.cinema.minute.ui.Model.Request.LoginRequest;
 import com.cinema.minute.ui.Model.Request.SignupRequest;
 import com.cinema.minute.ui.Model.Response.JwtResponse;
 import com.cinema.minute.ui.Model.Response.MessageResponse;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -25,7 +27,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-
+@Api(description = "service for authentification ( login and signup )  ")
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/auth")
@@ -44,7 +46,7 @@ public class AuthController {
 
     @Autowired
     JwtUtils jwtUtils;
-
+    @ApiOperation(value = "login request and generate the token value  ")
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
             User user =  userRepository.findByUsername(loginRequest.getUsername()).orElseThrow(()-> new RuntimeException("this user does not exist"));
@@ -71,7 +73,7 @@ public class AuthController {
                 userDetails.getEmail(),
                 roles));
     }
-
+  @ApiOperation(value = " registre of user and waiting for validation from administrateur")
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
         if (userRepository.existsByUsername(signUpRequest.getUsername())) {
