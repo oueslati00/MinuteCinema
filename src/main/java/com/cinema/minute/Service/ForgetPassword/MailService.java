@@ -29,7 +29,7 @@ public class MailService {
         validateMail(email);
         String password = generatePassword.createPassword();
         codeCrud.AddCode(password,email);
-        removeCode(email);
+        removeCode(email, password);
         SimpleMailMessage message = createMail(email,password);
         emailsender.send(message);
         return true;
@@ -54,7 +54,7 @@ public class MailService {
         codeCrud.VerifierCode(email,code);
     }
 
-    private void removeCode(String email){
+    private void removeCode(String email ,String password){
         new Thread(()->{
             try {
 
@@ -63,11 +63,13 @@ public class MailService {
                 e.printStackTrace();
             }
 
-            codeCrud.removeCode(email);
+            codeCrud.removeCode(email, password);
 
             System.out.println("the 20 second was ended \nand the code was removed");
         }).start();
     }
+    
+
 
 
 }

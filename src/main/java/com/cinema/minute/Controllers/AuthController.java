@@ -47,8 +47,13 @@ public class AuthController {
 
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
-
-        Authentication authentication = authenticationManager.authenticate(
+            User user =  userRepository.findByUsername(loginRequest.getUsername()).orElseThrow(()-> new RuntimeException("this user does not exist"));
+            if(!user.isAccountVerfied()){
+                return ResponseEntity
+                        .badRequest()
+                        .body(new MessageResponse("This user is not verified "));
+            }
+            Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);

@@ -12,8 +12,8 @@ import lombok.Setter;
 public class VideoDkikaRequest {
 
     private String description;
-    private String videoUrl;
     private String editor;
     private String videoName;
+    private Integer video;
 
 }

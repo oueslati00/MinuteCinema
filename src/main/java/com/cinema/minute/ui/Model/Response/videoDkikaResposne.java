@@ -11,11 +11,10 @@ import org.springframework.core.io.Resource;
 @NoArgsConstructor
 @AllArgsConstructor
 public class videoDkikaResposne {
+    private Integer id;
     private String description;
-    private String Url;
     private String editor;
     private String Name;
-
-    private Resource fileInfo;
+    private Integer IdVideo;
 
 }

@@ -6,7 +6,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.util.List;
-@ToString
+
 @Entity
 @Getter
 @Setter
@@ -29,4 +29,9 @@ public class Chapter {
 
     @OneToMany(mappedBy = "chapter")
     private List<Cours> cours;
+
+    @Override
+    public String toString(){
+        return "name" + name ;
+    }
 }

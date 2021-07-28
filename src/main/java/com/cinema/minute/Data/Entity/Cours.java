@@ -7,7 +7,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.util.List;
 
-@ToString
+
 @Entity
 @Getter
 @Setter
@@ -24,9 +24,24 @@ public class Cours {
     @Size(max=20)
     private String name;
 
+    @Column(name = "description")
+    private String description;
+
     @ManyToOne
     private Chapter chapter;
 
     @OneToMany(mappedBy = "cour")
     private List<CompteRendu> compteRendu;
+
+    @ManyToOne
+    @JoinColumn(name = "video")
+    private UploadFile video;
+
+    @OneToMany(mappedBy = "cour")
+    private List<Comment> comments;
+
+    @Override
+    public String toString() {
+        return "name :" + name;
+    }
 }

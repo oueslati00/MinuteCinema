@@ -36,9 +36,11 @@ public class FileInDB {
     public void removeFileById(Integer id){
         fileRepo.deleteById(id);
     }
+
     public void deleteAll(){
         fileRepo.deleteAll();
     }
+
     public UploadFile getFileById(Integer id){
         return fileRepo.findById(id).orElseThrow(()-> new RuntimeException(" file not found exception"));
     }

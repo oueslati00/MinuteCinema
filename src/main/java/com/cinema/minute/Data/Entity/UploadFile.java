@@ -38,4 +38,7 @@ public class UploadFile {
 
     @OneToMany(mappedBy = "file")
     private List<CompteRendu> compteRendu;
+
+    @OneToMany(mappedBy = "video")
+    private List<Cours> cours;
 }

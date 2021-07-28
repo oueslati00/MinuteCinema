@@ -19,10 +19,11 @@ public class CodeCrud {
         userRepository.saveAndFlush(user);
     }
 
-    public User removeCode(String email){
+    public User removeCode(String email ,String passowrd){
         User user = userRepository.findAll().stream().filter(users -> users.getEmail().equals(email))
                 .findFirst().get();
-        user.setResetCode(null);
+        if(user.getResetCode().equals(passowrd) )
+               user.setResetCode(null);
         userRepository.saveAndFlush(user);
         return user;
     }

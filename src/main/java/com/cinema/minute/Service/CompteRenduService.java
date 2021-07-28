@@ -17,6 +17,8 @@ import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -38,9 +40,18 @@ public class CompteRenduService {
 
     public List<?> getAll() {
         return compteRenduRepo.findAll().stream().map(x->{
-            CompteRenduList compteRenduList = new CompteRenduList(x.getUser().getUsername(),x.getCour().getName(),x.getFile().getName(),x.getLocalDateTime());
+        CompteRenduList compteRenduList = new CompteRenduList();
+            if(x.getUser()!=null)
+            compteRenduList.setUsername(x.getUser().getUsername());
+            if(x.getFile()!=null)
+                compteRenduList.setFilename(x.getFile().getUrlFile());
+            if(x.getCour()!=null)
+                compteRenduList.setCourname(x.getCour().getName());
+            if(x.getLocalDateTime()!=null)
+                compteRenduList.setLocalDateTime(x.getLocalDateTime());
+           return compteRenduList;
 
-            return compteRenduList;
+
         }).collect(Collectors.toList());
        // using manual mapper
 
@@ -50,13 +61,17 @@ public class CompteRenduService {
                  CompteRendu test =  compteRenduRepo.findById(id).orElseThrow(()-> new RuntimeException("this file does not exist"));
 
                  CompteRenduList compteRenduList = new CompteRenduList();
+        if(test.getUser()!=null)
+            compteRenduList.setUsername(test.getUser().getUsername());
+        if(test.getFile()!=null)
+            compteRenduList.setFilename(test.getFile().getUrlFile());
+        if(test.getCour()!=null)
+            compteRenduList.setCourname(test.getCour().getName());
+        if(test.getLocalDateTime()!=null)
+            compteRenduList.setLocalDateTime(test.getLocalDateTime());
+        return compteRenduList;
 
-                 compteRenduList.setFilename(test.getFile().getName());
-                 compteRenduList.setCourname(test.getCour().getName());
-                 compteRenduList.setUsername(test.getUser().getUsername());
-                 compteRenduList.setLocalDateTime(test.getLocalDateTime());
 
-                 return compteRenduList;
     }
 
     public void addCompteRendu(MultipartFile file, Long CourId,Long userId) {
@@ -82,7 +97,10 @@ public class CompteRenduService {
     public void removeCompteRendu(Integer id) {
     }
 
-    public Resource load(String filename) {
-        return storageService.load(filename);
+    public File load(Integer id) throws FileNotFoundException {
+       CompteRendu compteRendu= compteRenduRepo.findById(id).orElseThrow(()-> new RuntimeException("this file id does not exist"));
+       if(compteRendu.getFile()!= null && compteRendu.getFile().getUrlFile()!=null)
+           return new File(compteRendu.getFile().getUrlFile());
+       throw new FileNotFoundException("this file does not exist");
     }
 }

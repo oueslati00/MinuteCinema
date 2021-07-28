@@ -6,6 +6,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -27,10 +28,34 @@ public class User {
 
     private String ResetCode;
 
+    private String adress;
+    private String city;
+    private String codePostal;
+    private String country;
+    private String phoneNumber;
+    private LocalDate dateOfBirth;
+
+    @Basic
+    @Column(name = "date_de_naissance", nullable = true, length = 255)
+    public LocalDate getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public void setDateOfBirth(LocalDate dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
+    }
+
     @NotBlank
     @Size(max = 50)
     @Email
     private String email;
+
+
+    @OneToMany(mappedBy = "user")
+    private List<Formation> formations;
+
+    @OneToMany(mappedBy = "user")
+    private List<Comment> comments;
 
     @NotBlank
     @Size(max = 120)
@@ -101,5 +126,55 @@ public class User {
 
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
+    }
+
+    @Basic
+    @Column(name = "adress", nullable = true, length = 255)
+    public String getAdress() {
+        return adress;
+    }
+
+    public void setAdress(String adress) {
+        this.adress = adress;
+    }
+
+    @Basic
+    @Column(name = "city", nullable = true, length = 255)
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    @Basic
+    @Column(name = "code_postal", nullable = true, length = 255)
+    public String getCodePostal() {
+        return codePostal;
+    }
+
+    public void setCodePostal(String codePostal) {
+        this.codePostal = codePostal;
+    }
+
+    @Basic
+    @Column(name = "country", nullable = true, length = 255)
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    @Basic
+    @Column(name = "phone_number", nullable = true, length = 255)
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 }

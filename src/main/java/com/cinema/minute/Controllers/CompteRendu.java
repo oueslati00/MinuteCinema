@@ -1,6 +1,7 @@
 package com.cinema.minute.Controllers;
 
 import com.cinema.minute.Service.CompteRenduService;
+import com.cinema.minute.Service.MyResourceHttpRequestHandler;
 import com.cinema.minute.ui.Model.Request.CompteRenduRequest.compteRendurequest;
 import com.cinema.minute.ui.Model.Request.VideoDkikaRequest;
 import com.cinema.minute.ui.Model.Response.videoDkikaResposne;
@@ -12,28 +13,35 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/compteRendu")
+@RequestMapping("")
 public class CompteRendu {
 
 
     @Autowired
     private CompteRenduService compteRenduService;
+    @Autowired
+    private MyResourceHttpRequestHandler handler;
 
-    @GetMapping(value = "/all")
+    @GetMapping(value = "/api/admin/compteRendu/all")
     public ResponseEntity<?> getCompteRendu() {
         List<?> compteRenduList = compteRenduService.getAll();
         return new ResponseEntity<>(compteRenduList, HttpStatus.OK);
     }
-    @GetMapping(value = "/{id}")
+    @GetMapping(value = "/api/admin/compteRendu/file/{id}")
     public ResponseEntity<?> getCompteRenduById(@PathVariable Integer id) {
         Object test = compteRenduService.get(id);
         return new ResponseEntity<>(test, HttpStatus.OK);
     }
 
-    @PostMapping(consumes = {"multipart/form-data"})
+    @PostMapping(value = "/api/user/compteRendu", consumes = {"multipart/form-data"})
     public ResponseEntity<?> addCompteRendu(@RequestParam MultipartFile file, @RequestParam Long courId, @RequestParam Long userId) {
         System.out.println(courId + "user " + userId);
         System.out.println("cool");
@@ -41,13 +49,15 @@ public class CompteRendu {
         return new ResponseEntity<>(HttpStatus.OK);
 
     }
-    @GetMapping("/test/{filename:.+}")
-    @ResponseBody
-    public ResponseEntity<Resource> getFile(@PathVariable String filename) {
-        System.out.println(filename);
-        Resource file = compteRenduService.load(filename);
-        return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"").body(file);
+    @GetMapping("/api/admin/compteRendu/byterange/{id}")
+
+    public void byterange (HttpServletRequest request, HttpServletResponse response, @PathVariable Integer id ) throws ServletException, IOException {
+        File f = compteRenduService.load(id);
+        if(f.exists()){
+            System.out.println("ok ");
+        }
+        request.setAttribute(MyResourceHttpRequestHandler.ATTR_FILE, f);
+        handler.handleRequest(request, response);
     }
 
     @PutMapping(value = "/{id}")
@@ -56,7 +66,7 @@ public class CompteRendu {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @DeleteMapping(value = "/{id}")
+    @DeleteMapping(value = "/api/admin/compteRendu/{id}")
     public ResponseEntity<?> removeCompteRendu(@PathVariable Integer id) {
         compteRenduService.removeCompteRendu(id);
         return new ResponseEntity<>(HttpStatus.OK);
