@@ -32,7 +32,7 @@ public class User {
     }
 
     @ApiOperation(value ="get information about chaque user  ")
-    @GetMapping("admin/informationUser/{id}")
+    @GetMapping("user/informationUser/{id}")
     public ResponseEntity<?> InformationUser(@PathVariable long id ){
         UserResponse userResponse =userService.getInformation(id);
         return new ResponseEntity<>(userResponse,HttpStatus.OK);

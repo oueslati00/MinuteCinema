@@ -12,5 +12,5 @@ import java.util.List;
 public class ChapterResponse {
     private Long id;
     private String name;
-    private List<CoursResponse> cours;
+    private List<CoursResponse> cour;
 }

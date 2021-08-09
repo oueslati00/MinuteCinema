@@ -19,6 +19,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -48,6 +50,9 @@ public class FormationService {
 
    public formationResponse AddFormation(FormationRequest formationRequest) {
         System.out.println(formationRequest);
+        // test if the formateur was exist
+
+       System.out.println(formationRequest.getFormateurId());
        User user =userRepository.findById(formationRequest.getFormateurId().longValue()).orElseThrow(()-> new RuntimeException("this user does not exist"));
        if(user==null) {
             throw new NullPointerException("this user does not exist");
@@ -60,16 +65,22 @@ public class FormationService {
         formation.setId(null);
 
        Formation formation1= formationRepo.save(formation);
+       // save list of chapter
        for (int i = 0; i < formation.getChapter().size() ; i++) {
            formation.getChapter().get(i).setFormation(formation);
        }
        chapterRepo.saveAll(formation.getChapter());
 
        for (int i = 0; i <formation.getChapter().size() ; i++) {
-           for (int j = 0; j < formation.getChapter().get(i).getCours().size() ; j++) {
-               formation.getChapter().get(i).getCours().get(j).setChapter( formation.getChapter().get(i));
+           for (int j = 0; j < formation.getChapter().get(i).getCour().size() ; j++) {
+               // set chapter to cour object
+               formation.getChapter().get(i).getCour().get(j).setChapter( formation.getChapter().get(i));
+               // set video id to cour from formation request
+               UploadFile file = storageService.fileInDB.getFileById(formationRequest.getChapter().get(i).getCour().get(j).getVid());
+               formation.getChapter().get(i).getCour().get(j).setVideo(file);
+
            }
-           courRepo.saveAll(formation.getChapter().get(i).getCours());
+           courRepo.saveAll(formation.getChapter().get(i).getCour());
        }
        Integer id =  formation1.getId();
        Formation formation2 = formationRepo.getById(id);
@@ -78,18 +89,25 @@ public class FormationService {
 
     }
 
-    public void AddVideo(MultipartFile file,Long CourId){
-        Cours cours = courRepo.findById(CourId).orElseThrow(()-> new RuntimeException(" this cours does not exist"));
+    public Integer AddVideo(MultipartFile file){
         UploadFile f = storageService.save(file);
-        cours.setVideo(f);
-
-        courRepo.saveAndFlush(cours);
+        return f.getId();
     }
 
     public formationResponse getFormationDescription(Integer id){
         Formation formation= formationRepo.findById(id).orElseThrow(()-> new RuntimeException("this formation does not exist"));
         formationResponse formationResponse = modelMapper.map(formation, formationResponse.class);
+        double dur = calculeDur(formation.getFirstDate(),formation.getFinalDate());
+        formationResponse.setDurationPerNow(dur);
         return formationResponse;
+    }
+
+    private double calculeDur(LocalDate firstDate, LocalDate finalDate) {
+      long l = finalDate.toEpochDay()- firstDate.toEpochDay();
+      long l1 = LocalDate.now().toEpochDay()-firstDate.toEpochDay();
+
+        return l1*100.00/l;
+
     }
 
     public List<FormationListInfo> getFormationListInformation(){
@@ -123,5 +141,10 @@ public class FormationService {
        String filePath=  cours.getVideo().getUrlFile();
          File f = new File(filePath);
          return f;
+    }
+
+    public List<?> getListFormationByformateurId(Long id) {
+       return formationRepo.findAll().stream().filter(x-> x.getUser().getId().equals(id))
+                .collect(Collectors.toList());
     }
 }

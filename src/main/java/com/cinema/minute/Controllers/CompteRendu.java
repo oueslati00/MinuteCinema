@@ -2,19 +2,13 @@ package com.cinema.minute.Controllers;
 
 import com.cinema.minute.Service.CompteRenduService;
 import com.cinema.minute.Service.MyResourceHttpRequestHandler;
-import com.cinema.minute.ui.Model.Request.CompteRenduRequest.compteRendurequest;
-import com.cinema.minute.ui.Model.Request.VideoDkikaRequest;
-import com.cinema.minute.ui.Model.Response.videoDkikaResposne;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.Resource;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

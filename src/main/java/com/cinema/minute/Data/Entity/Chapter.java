@@ -28,7 +28,7 @@ public class Chapter {
     private Formation formation;
 
     @OneToMany(mappedBy = "chapter")
-    private List<Cours> cours;
+    private List<Cours> cour;
 
     @Override
     public String toString(){

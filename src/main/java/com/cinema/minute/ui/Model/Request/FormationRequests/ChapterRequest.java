@@ -9,5 +9,5 @@ import java.util.List;
 public class ChapterRequest {
 
     private String name;
-    private List<CoursRequest> cours;
+    private List<CoursRequest> cour;
 }

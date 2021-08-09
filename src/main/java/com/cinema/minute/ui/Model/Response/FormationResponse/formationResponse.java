@@ -27,5 +27,6 @@ public class formationResponse {
     @JsonSerialize(using = LocalDateSerializer.class)
     private LocalDate FinalDate;
     private String description;
-    private List<ChapterResponse> Chapter;
+    private List<ChapterResponse> chapter;
+    private double durationPerNow;
 }

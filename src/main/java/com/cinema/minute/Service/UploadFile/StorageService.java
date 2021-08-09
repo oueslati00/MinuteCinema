@@ -25,7 +25,7 @@ public class StorageService implements  FileStorageService {
     private String path;
 
     @Autowired
-    private FileInDB fileInDB;
+    public FileInDB fileInDB;
 
     @Override
     public void init() {
