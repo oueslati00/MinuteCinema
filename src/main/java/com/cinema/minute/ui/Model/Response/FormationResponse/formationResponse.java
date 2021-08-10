@@ -28,5 +28,5 @@ public class formationResponse {
     private LocalDate FinalDate;
     private String description;
     private List<ChapterResponse> chapter;
-    private double durationPerNow;
+    private long durationPerNow;
 }

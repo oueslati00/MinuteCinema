@@ -1,16 +1,17 @@
 package com.cinema.minute.Service;
 
-import com.cinema.minute.Data.Entity.CompteRendu;
-import com.cinema.minute.Data.Entity.ERole;
-import com.cinema.minute.Data.Entity.Role;
-import com.cinema.minute.Data.Entity.User;
+import com.cinema.minute.Data.Entity.*;
 import com.cinema.minute.Data.Repository.*;
+import com.cinema.minute.Service.UploadFile.StorageService;
 import com.cinema.minute.ui.Model.Request.UserRequest.UserInformationRequest;
 import com.cinema.minute.ui.Model.Response.UserResponse.UserResponse;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,15 +24,17 @@ public class UserService {
     private FormationRepo formationRepo;
     private CommentRepository commentRepository;
     private CompteRenduRepo compteRenduRepo;
+    private StorageService storageService;
 
     @Autowired
-    public UserService(UserRepository userRepository, ModelMapper modelMapper, RoleRepository roleRepository , FormationRepo formationRepo , CommentRepository commentRepository , CompteRenduRepo compteRenduRepo) {
+    public UserService(UserRepository userRepository, ModelMapper modelMapper, RoleRepository roleRepository , FormationRepo formationRepo , CommentRepository commentRepository , CompteRenduRepo compteRenduRepo, StorageService storageService) {
         this.userRepository = userRepository;
         this.modelMapper = modelMapper;
         this.roleRepository = roleRepository;
         this.formationRepo = formationRepo;
         this.commentRepository=commentRepository;
         this.compteRenduRepo = compteRenduRepo;
+        this.storageService = storageService;
     }
 
 
@@ -91,6 +94,8 @@ public class UserService {
        user1.setRoles(user.getRoles());
        user1.setPassword(user.getPassword());
        user1.setId(user.getId());
+       user1.setImageUser(user.getImageUser());
+       user1.setAccountVerfied(true);
        userRepository.save(user1);
        userRepository.flush();
     }
@@ -123,5 +128,21 @@ public class UserService {
         Role role = roleRepository.findByName(ERole.ROLE_MODERATOR).get();
         user.getRoles().remove(role);
           userRepository.save(user);
+    }
+
+    public void addImage(MultipartFile imageProfil, Long userId) {
+        User user= userRepository.findById(userId).orElseThrow(()-> new RuntimeException("this user does not exist"));
+        UploadFile f = storageService.save(imageProfil);
+        user.setImageUser(f);
+        userRepository.saveAndFlush(user);
+
+    }
+
+    public File getImageByUserId(Long id) throws FileNotFoundException {
+        User user= userRepository.findById(id).orElseThrow(()-> new RuntimeException("this user does not exist"));
+         if(user.getImageUser() != null && user.getImageUser().getUrlFile() != null){
+             return new File(user.getImageUser().getUrlFile());
+         }
+        throw new FileNotFoundException("this file does not exist");
     }
 }

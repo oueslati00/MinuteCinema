@@ -21,5 +21,6 @@ public class FormationListInfo {
     @JsonDeserialize(using = LocalDateDeserializer.class)
     @JsonSerialize(using = LocalDateSerializer.class)
     private LocalDate dateToStart;
+    private Long formateurId;
 
 }

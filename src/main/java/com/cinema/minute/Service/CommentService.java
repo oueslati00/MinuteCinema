@@ -85,6 +85,7 @@ public class CommentService {
                         commentResponse.setCourId(comment.getId());
                         commentResponse.setDescription(comment.getDescription());
                         commentResponse.setLocalDate(comment.getLocalDate());
+                        commentResponse.setUserId(comment.getUser().getId());
 
                     }catch(NullPointerException e){}
                     return commentResponse;

@@ -35,6 +35,10 @@ public class User {
     private String phoneNumber;
     private LocalDate dateOfBirth;
 
+    @ManyToOne
+    @JoinColumn(name = "picUser")
+    private UploadFile imageUser;
+
     @Basic
     @Column(name = "date_de_naissance", nullable = true, length = 255)
     public LocalDate getDateOfBirth() {

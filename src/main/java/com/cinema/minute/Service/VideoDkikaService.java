@@ -9,8 +9,7 @@ import com.cinema.minute.ui.Model.Request.VideoDkikaRequest;
 import com.cinema.minute.ui.Model.Response.videoDkikaResposne;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.Resource;
-import org.springframework.security.access.prepost.PreAuthorize;
+
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 

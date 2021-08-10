@@ -22,4 +22,6 @@ public class CommentResponse {
     @JsonDeserialize(using = LocalDateDeserializer.class)
     @JsonSerialize(using = LocalDateSerializer.class)
     private LocalDate localDate;
+
+    private long userId ;
 }

@@ -97,16 +97,16 @@ public class FormationService {
     public formationResponse getFormationDescription(Integer id){
         Formation formation= formationRepo.findById(id).orElseThrow(()-> new RuntimeException("this formation does not exist"));
         formationResponse formationResponse = modelMapper.map(formation, formationResponse.class);
-        double dur = calculeDur(formation.getFirstDate(),formation.getFinalDate());
+        long dur = calculeDur(formation.getFirstDate(),formation.getFinalDate());
         formationResponse.setDurationPerNow(dur);
         return formationResponse;
     }
 
-    private double calculeDur(LocalDate firstDate, LocalDate finalDate) {
+    private long calculeDur(LocalDate firstDate, LocalDate finalDate) {
       long l = finalDate.toEpochDay()- firstDate.toEpochDay();
       long l1 = LocalDate.now().toEpochDay()-firstDate.toEpochDay();
 
-        return l1*100.00/l;
+        return Math.round(l1*100.00/l);
 
     }
 
@@ -121,6 +121,7 @@ public class FormationService {
                formationListInfo.setFormationName(formation.getName());
                formationListInfo.setDateToStart(formation.getFirstDate());
                formationListInfo.setFormateurName(formation.getUser().getUsername());
+               formationListInfo.setFormateurId(formation.getUser().getId());
 
            }catch (NullPointerException e){
            }

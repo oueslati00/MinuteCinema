@@ -1,6 +1,7 @@
 package com.cinema.minute.Controllers;
 
 import com.cinema.minute.Service.CommentService;
+import com.cinema.minute.Service.MyResourceHttpRequestHandler;
 import com.cinema.minute.Service.UserService;
 import com.cinema.minute.ui.Model.Request.Comments.CommentRequest;
 import com.cinema.minute.ui.Model.Request.UserRequest.UserInformationRequest;
@@ -10,7 +11,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 @ApiOperation(value="api utiliser pour le gestion de user ")
 @RestController
@@ -18,10 +25,12 @@ import java.util.List;
 public class User {
 
     private UserService userService;
+    private MyResourceHttpRequestHandler handler;
 
     @Autowired
-    public User(UserService userService){
+    public User(UserService userService , MyResourceHttpRequestHandler handler){
         this.userService =userService;
+        this.handler = handler;
     }
 
 @ApiOperation(value="get list de utilisateur formateur et simple user ")
@@ -30,6 +39,7 @@ public class User {
         List<?> userList =userService.getListSimpleUser();
         return new ResponseEntity<>(userList,HttpStatus.OK);
     }
+
 
     @ApiOperation(value ="get information about chaque user  ")
     @GetMapping("user/informationUser/{id}")
@@ -81,5 +91,23 @@ public class User {
     public ResponseEntity<?> DeleteFormateurRole(@PathVariable long id){
         userService.RemoveFormateurRole(id);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @ApiOperation("ajouter une image a un user a travers son Id ")
+    @PostMapping(value = "user/Image")
+    public ResponseEntity<?> addimageByUserId(@RequestParam MultipartFile imageProfil , @RequestParam Long userId ) {
+        userService.addImage(imageProfil,userId);
+        return new ResponseEntity<>("this e=image was added correctly", HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "display un image user par son Id   ")
+    @GetMapping("user/informationUser/image/{id}")
+    public void byterange (HttpServletRequest request, HttpServletResponse response, @PathVariable Long id ) throws ServletException, IOException {
+        File f = userService.getImageByUserId(id);
+        if(f.exists()){
+            System.out.println("ok ");
+        }
+        request.setAttribute(MyResourceHttpRequestHandler.ATTR_FILE, f);
+        handler.handleRequest(request, response);
     }
 }
