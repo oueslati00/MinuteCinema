@@ -1,5 +1,8 @@
 package com.cinema.minute.Controllers;
 
+import com.cinema.minute.Data.Repository.UserRepository;
+import com.cinema.minute.Security.jwt.JwtUtils;
+import com.cinema.minute.Security.services.UserDetailsServiceImpl;
 import com.cinema.minute.Service.CommentService;
 import com.cinema.minute.Service.MyResourceHttpRequestHandler;
 import com.cinema.minute.Service.UserService;
@@ -7,12 +10,14 @@ import com.cinema.minute.ui.Model.Request.Comments.CommentRequest;
 import com.cinema.minute.ui.Model.Request.UserRequest.UserInformationRequest;
 import com.cinema.minute.ui.Model.Response.UserResponse.UserResponse;
 import io.swagger.annotations.ApiOperation;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -26,7 +31,14 @@ public class User {
 
     private UserService userService;
     private MyResourceHttpRequestHandler handler;
-
+    @Autowired
+    private JwtUtils jwtUtils;
+    @Autowired
+    private UserDetailsServiceImpl userDetailsService;
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private ModelMapper modelMapper;
     @Autowired
     public User(UserService userService , MyResourceHttpRequestHandler handler){
         this.userService =userService;
@@ -109,5 +121,21 @@ public class User {
         }
         request.setAttribute(MyResourceHttpRequestHandler.ATTR_FILE, f);
         handler.handleRequest(request, response);
+    }
+
+    @GetMapping("user/test")
+    public UserResponse getUserByToken(HttpServletRequest request, HttpServletResponse response){
+        String headerAuth = request.getHeader("Authorization");
+        if (StringUtils.hasText(headerAuth) && headerAuth.startsWith("Bearer ")) {
+            String token =  headerAuth.substring(7, headerAuth.length());
+            if(jwtUtils.validateJwtToken(token)){
+                String username = jwtUtils.getUserNameFromJwtToken(token);
+               com.cinema.minute.Data.Entity.User user = userRepository.findByUsername(username).get();
+             UserResponse userResponse =    modelMapper.map(user, UserResponse.class);
+                System.out.println(userResponse);
+            return userResponse;
+            }
+        }
+        throw  new RuntimeException("get user method throw an error ");
     }
 }

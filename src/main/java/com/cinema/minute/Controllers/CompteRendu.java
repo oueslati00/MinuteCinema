@@ -2,6 +2,8 @@ package com.cinema.minute.Controllers;
 
 import com.cinema.minute.Service.CompteRenduService;
 import com.cinema.minute.Service.MyResourceHttpRequestHandler;
+import com.cinema.minute.ui.Model.Response.CompteRendu.CompteRenduList;
+import com.cinema.minute.ui.Model.Response.UserResponse.UserResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +17,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
+
 @Api(description = "compte Rendu Api")
 @RestController
 public class CompteRendu {
@@ -30,6 +34,12 @@ public class CompteRendu {
     @GetMapping(value = "/api/admin/compteRendu/all")
     public ResponseEntity<?> getCompteRendu() {
         List<?> compteRenduList = compteRenduService.getAll();
+        return new ResponseEntity<>(compteRenduList, HttpStatus.OK);
+    }
+    @GetMapping(value = "api/admin/list/compteRenduByformation/{id}")
+    public ResponseEntity<?> getListCompteRenduByforamtion(@PathVariable Integer id)
+    {
+        List<?> compteRenduList = compteRenduService.getByFormationId(id);
         return new ResponseEntity<>(compteRenduList, HttpStatus.OK);
     }
 
@@ -71,5 +81,13 @@ public class CompteRendu {
         compteRenduService.removeCompteRendu(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @GetMapping(value = "api/formateur/list/compteRendu/{id}")
+    public ResponseEntity<?> getListCompteRenduForForamteurById(@PathVariable Long id){
+      List<CompteRenduList> list =  compteRenduService.getListCompteRenduForForamteurById(id);
+    return new ResponseEntity<>(list, HttpStatus.OK);
+    }
+
+
 
 }

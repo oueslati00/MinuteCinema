@@ -42,7 +42,7 @@ public class UserService {
 
     public List<?> getListSimpleUser() {
         return userRepository.findAll().stream().filter(user -> {
-               boolean isUser=  user.getRoles().stream().anyMatch(x->x.getName().equals(ERole.ROLE_USER));
+               boolean isUser=  user.getRoles().stream().anyMatch(x->(x.getName().equals(ERole.ROLE_USER)) || x.getName().equals(ERole.ROLE_MODERATOR));
              //  boolean length = user.getRoles().size() == 1;
            return isUser ;
         }).map(user -> {
@@ -115,6 +115,7 @@ public class UserService {
         user.getRoles().add(role);
         user.setAccountVerfied(true);
         userRepository.save(user);
+        System.out.println(user);
     }
 
     public void UnvalidateUser(long id){
@@ -145,4 +146,5 @@ public class UserService {
          }
         throw new FileNotFoundException("this file does not exist");
     }
+
 }

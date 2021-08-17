@@ -2,6 +2,7 @@ package com.cinema.minute.Service;
 
 import com.cinema.minute.Data.Entity.UploadFile;
 import com.cinema.minute.Data.Entity.Videodkika;
+import com.cinema.minute.Data.Repository.FileRepo;
 import com.cinema.minute.Data.Repository.VideoDkikaRepo;
 import com.cinema.minute.Service.UploadFile.FileInDB;
 import com.cinema.minute.Service.UploadFile.StorageService;
@@ -27,6 +28,9 @@ public class VideoDkikaService {
 
     @Autowired
     private FileInDB fileInDB;
+
+    @Autowired
+    private FileRepo fileRepo;
 
     @Autowired
     ModelMapper modelMapper;
@@ -88,11 +92,8 @@ public class VideoDkikaService {
 
 
     public File getResource(Integer id) {
-       Videodkika v =  videoDkikaRepo.findById(id).orElseThrow(()-> new RuntimeException("this file does not exist in data base"));
-       if(v.getVideo() == null)
-           throw new NullPointerException("this video does not exist");
-
-       String url = v.getVideo().getUrlFile();
+       UploadFile v =  fileRepo.findById(id).orElseThrow(()-> new RuntimeException("this file does not exist in data base"));
+       String url = v.getUrlFile();
        File file = new File(url);
 
        if(!file.exists())

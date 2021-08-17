@@ -54,14 +54,14 @@ public class videoDkikaController {
         return new ResponseEntity<>(id,HttpStatus.OK);
     }
 
-  /*  @ApiOperation(value="")
+    @ApiOperation(value="")
     @PostMapping(value = "api/admin/videoDkika/video")
     public ResponseEntity<?> addVideo(@RequestBody VideoDkikaRequest vd){
         videoDkikaService.addVideo(vd);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PutMapping(value = "api/admin/videoDkika/{id}")
+   /* @PutMapping(value = "api/admin/videoDkika/{id}")
     public ResponseEntity<?> updateVideo(@RequestBody VideoDkikaRequest vd ,@PathVariable Integer id ){
         videoDkikaService.updateVideo(vd ,id);
         return new ResponseEntity<>(HttpStatus.OK);

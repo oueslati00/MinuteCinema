@@ -13,6 +13,6 @@ import java.time.LocalDateTime;
 public class CompteRenduList {
     private String username;
     private String courname;
-    private String filename;
+    private Integer fileId;
     private LocalDateTime localDateTime;
 }
