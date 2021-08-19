@@ -48,14 +48,14 @@ public class videoDkikaController {
     }
 
     @ApiOperation(value="upload video dkika")
-    @PostMapping(value = "api/admin/videoDkika/upload", consumes = {"multipart/form-data"})
+    @PostMapping(value = "api/formateur/videoDkika/upload", consumes = {"multipart/form-data"})
     public ResponseEntity<?> uploadVideo(@RequestParam MultipartFile file){
         Integer id = videoDkikaService.uploadVideo(file);
         return new ResponseEntity<>(id,HttpStatus.OK);
     }
 
     @ApiOperation(value="")
-    @PostMapping(value = "api/admin/videoDkika/video")
+    @PostMapping(value = "api/formateur/videoDkika/video")
     public ResponseEntity<?> addVideo(@RequestBody VideoDkikaRequest vd){
         videoDkikaService.addVideo(vd);
         return new ResponseEntity<>(HttpStatus.OK);
