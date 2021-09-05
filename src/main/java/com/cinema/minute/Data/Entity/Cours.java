@@ -34,7 +34,7 @@ public class Cours {
     private List<CompteRendu> compteRendu;
 
     @ManyToOne
-    @JoinColumn(name = "video")
+    @JoinColumn(name = "video" )
     private UploadFile video;
 
     @OneToMany(mappedBy = "cour")

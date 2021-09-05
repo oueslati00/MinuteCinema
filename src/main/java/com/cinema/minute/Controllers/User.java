@@ -3,18 +3,16 @@ package com.cinema.minute.Controllers;
 import com.cinema.minute.Data.Repository.UserRepository;
 import com.cinema.minute.Security.jwt.JwtUtils;
 import com.cinema.minute.Security.services.UserDetailsServiceImpl;
-import com.cinema.minute.Service.CommentService;
 import com.cinema.minute.Service.MyResourceHttpRequestHandler;
 import com.cinema.minute.Service.UserService;
-import com.cinema.minute.ui.Model.Request.Comments.CommentRequest;
 import com.cinema.minute.ui.Model.Request.UserRequest.UserInformationRequest;
+import com.cinema.minute.ui.Model.Response.InfoResponse;
 import com.cinema.minute.ui.Model.Response.UserResponse.UserResponse;
 import io.swagger.annotations.ApiOperation;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -137,5 +135,11 @@ public class User {
             }
         }
         throw  new RuntimeException("get user method throw an error ");
+    }
+
+    @GetMapping("admin/statistic")
+    public InfoResponse getStat(){
+      InfoResponse info =  userService.getInforStatiscitque();
+      return info;
     }
 }

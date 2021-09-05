@@ -44,6 +44,7 @@ public class Formation {
     // this get define only name and DateTo start Formateur name
     @GetMapping(value = "/api/user/formation/list")
     public ResponseEntity<List<?>> getListFormation() {
+        System.out.println("get list formation was executed ");
         List<?> list = formationService.getFormationListInformation();
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
@@ -82,6 +83,13 @@ public class Formation {
     @PostMapping(value = "/api/formateur/formation/addVideo", consumes = {"multipart/form-data"})
     public ResponseEntity<?> addVideoForCours(@RequestParam MultipartFile file) {
         Integer id= formationService.AddVideo(file);
+        return ResponseEntity.ok(id);
+    }
+
+    @DeleteMapping(value = "/api/formateur/formation/{id}")
+    public ResponseEntity<?> removeFormation(@PathVariable Long id){
+        formationService.removeFormationById(id);
+        System.out.println("delete method was executed ");
         return ResponseEntity.ok(id);
     }
 }

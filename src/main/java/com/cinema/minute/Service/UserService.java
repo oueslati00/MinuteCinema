@@ -4,6 +4,7 @@ import com.cinema.minute.Data.Entity.*;
 import com.cinema.minute.Data.Repository.*;
 import com.cinema.minute.Service.UploadFile.StorageService;
 import com.cinema.minute.ui.Model.Request.UserRequest.UserInformationRequest;
+import com.cinema.minute.ui.Model.Response.InfoResponse;
 import com.cinema.minute.ui.Model.Response.UserResponse.UserResponse;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,8 @@ public class UserService {
     private CommentRepository commentRepository;
     private CompteRenduRepo compteRenduRepo;
     private StorageService storageService;
+    @Autowired
+    private VideoDkikaRepo videoDkikaRepo;
 
     @Autowired
     public UserService(UserRepository userRepository, ModelMapper modelMapper, RoleRepository roleRepository , FormationRepo formationRepo , CommentRepository commentRepository , CompteRenduRepo compteRenduRepo, StorageService storageService) {
@@ -147,4 +150,11 @@ public class UserService {
         throw new FileNotFoundException("this file does not exist");
     }
 
+    public InfoResponse getInforStatiscitque() {
+        InfoResponse infor = new InfoResponse();
+        infor.setFormationNumber(formationRepo.count());
+        infor.setCompteRenduNumber(compteRenduRepo.count());
+        infor.setVideoNumber(videoDkikaRepo.count());
+        return infor;
+    }
 }

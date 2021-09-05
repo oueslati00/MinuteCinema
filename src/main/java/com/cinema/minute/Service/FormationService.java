@@ -1,10 +1,7 @@
 package com.cinema.minute.Service;
 
 import com.cinema.minute.Data.Entity.*;
-import com.cinema.minute.Data.Repository.ChapterRepo;
-import com.cinema.minute.Data.Repository.CourRepo;
-import com.cinema.minute.Data.Repository.FormationRepo;
-import com.cinema.minute.Data.Repository.UserRepository;
+import com.cinema.minute.Data.Repository.*;
 import com.cinema.minute.Service.UploadFile.StorageService;
 import com.cinema.minute.ui.Model.Request.FormationRequests.CoursRequest;
 import com.cinema.minute.ui.Model.Request.FormationRequests.FormationRequest;
@@ -34,6 +31,10 @@ public class FormationService {
     private FormationRepo formationRepo;
     private ChapterRepo chapterRepo;
     private StorageService storageService;
+    @Autowired
+    private CommentRepository commentRepository;
+    @Autowired
+    private CompteRenduRepo compteRenduRepo;
 
     @Autowired
     public FormationService(CourRepo courRepo, ModelMapper modelMapper , UserRepository userRepository, FormationRepo formationRepo, ChapterRepo chapterRepo, StorageService storageService){
@@ -147,5 +148,25 @@ public class FormationService {
     public List<?> getListFormationByformateurId(Long id) {
        return formationRepo.findAll().stream().filter(x-> x.getUser().getId().equals(id))
                 .collect(Collectors.toList());
+    }
+
+    public boolean removeFormationById(Long id) {
+
+        Formation formation =formationRepo.findById(id.intValue()).orElseThrow(() -> new RuntimeException("this formation does not exist "));
+        List<Chapter> chapter = formation.getChapter();
+        List<Cours> cours =formation.getChapter().stream().flatMap(x->x.getCour().stream()).collect(Collectors.toList());
+
+        List<Comment> comment = cours.stream().flatMap(x->x.getComments().stream()).collect(Collectors.toList());
+        commentRepository.deleteAll(comment);
+        List<UploadFile> listVideo = cours.stream().map(x->x.getVideo()).collect(Collectors.toList());
+        List<CompteRendu> compteRendu = cours.stream().flatMap(x->x.getCompteRendu().stream()).collect(Collectors.toList());
+        compteRendu.stream().forEach(x->compteRenduRepo.delete(x));
+        compteRendu.stream().forEach(x-> storageService.deleteById(x.getFile().getId()));
+        courRepo.deleteAll(cours);
+        listVideo.stream().forEach(x-> storageService.deleteById(x.getId()));
+        chapterRepo.deleteAll(chapter);
+        formationRepo.deleteById(id.intValue());
+
+    return true;
     }
 }
