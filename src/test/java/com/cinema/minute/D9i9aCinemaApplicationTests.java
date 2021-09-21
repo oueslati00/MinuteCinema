@@ -6,8 +6,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 class D9i9aCinemaApplicationTests {
 
-    @Test
-    void contextLoads() {
-    }
+
 
 }
