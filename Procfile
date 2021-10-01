@@ -1,0 +1,1 @@
+web: java $JAVA_OPTS -cp target/classes:target/dependency/* com.cinema.minute.D9i9aCinemaApplication
