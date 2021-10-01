@@ -129,8 +129,8 @@ public class AuthController {
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
     }
 
-    @GetMapping("hello")
-    public String TestGet(){
-        return "hello word";
+    @PostMapping("hello/{id}")
+    public String TestGet(@PathVariable long id){
+        return id + "hello word";
     }
 }
