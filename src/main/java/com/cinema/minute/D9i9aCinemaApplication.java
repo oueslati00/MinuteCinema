@@ -17,7 +17,7 @@ public class D9i9aCinemaApplication {
         SpringApplication.run(D9i9aCinemaApplication.class, args);
     }
 
-    @Bean
+   /* @Bean
     CommandLineRunner start(RoleRepository role){
         return args -> {
             Role userRole = new Role(ERole.ROLE_USER);
@@ -30,6 +30,6 @@ public class D9i9aCinemaApplication {
         };
 
     }
-
+*/
 
 }
