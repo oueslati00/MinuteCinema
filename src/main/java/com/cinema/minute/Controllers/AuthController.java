@@ -46,6 +46,7 @@ public class AuthController {
 
     @Autowired
     JwtUtils jwtUtils;
+
     @ApiOperation(value = "login request and generate the token value  ")
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
