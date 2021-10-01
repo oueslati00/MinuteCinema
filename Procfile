@@ -1,1 +1,1 @@
-web: java $JAVA_OPTS -cp target/classes:target/dependency/* com.cinema.minute.D9i9aCinemaApplication
+web: java -jar target/demo-0.0.1.jar --server.port=$PORT --spring.profiles.active=$PROFILE
