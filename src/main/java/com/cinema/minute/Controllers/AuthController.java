@@ -132,10 +132,12 @@ public class AuthController {
 
     @PostMapping("hello/{id}")
     public String TestGet(@PathVariable long id){
-        roleRepository.save(new Role(  ERole.ROLE_MODERATOR ,2));
 
-        roleRepository.save(new Role(ERole.ROLE_ADMIN,2));
-        roleRepository.save(new Role(ERole.ROLE_USER,3));
-        return id + "hello word";
+           List<Role> test = roleRepository.findAll();
+           String a = "";
+        for ( Role b: test) {
+            a = a+ b.getName()+ " ";
+        }
+           return a;
     }
 }
