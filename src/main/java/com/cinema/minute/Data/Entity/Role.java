@@ -20,6 +20,10 @@ public class Role {
     public Role(ERole name) {
         this.name = name;
     }
+    public Role(ERole name , Integer id) {
+        this.name = name;
+        this.id = id;
+    }
 
     public Integer getId() {
         return id;
